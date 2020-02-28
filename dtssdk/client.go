@@ -10,13 +10,25 @@ import (
 	"github.com/kataras/iris/core/errors"
 	"log"
 	"net"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
 
 func NewDTSClient(addr string) *Client {
+	var err error
+	port := 17083
+	a := strings.Split(addr, ":")
+	if len(a) == 2 {
+		addr = a[0]
+		port, err = strconv.Atoi(a[1])
+		if err != nil {
+			port = 17083
+		}
+	}
 	conn := &Client{
-		port: 17083,
+		port: port,
 	}
 	conn.init(addr)
 	return conn
